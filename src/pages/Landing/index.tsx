@@ -8,7 +8,7 @@ function LandingPage() {
   return (
     <div
       className="h-screen w-screen flex flex-col items-center
-      justify-between pt-20 py-28"
+      justify-between py-14"
     >
       <img src="/images/logo-pda.png" alt="logo pda" />
       <div className="flex flex-col items-center gap-4">

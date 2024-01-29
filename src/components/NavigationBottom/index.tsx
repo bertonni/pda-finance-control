@@ -1,4 +1,4 @@
-import { Home, BarChart2, DollarSign, LogOut } from "react-feather";
+import { Home, BarChart2, DollarSign, LogOut, UserPlus } from "react-feather";
 import { Link, useLocation } from "react-router-dom";
 import { NavItem } from "./NavItem";
 import { useAuth } from "../../hooks/useAuth";
@@ -8,8 +8,8 @@ export const NavigationBottom = () => {
   const { logout } = useAuth();
 
   return (
-    <div className="h-20 w-full flex items-center justify-center gap-4 bg-[#EFEDF1]">
-      <Link className="bg-transparent" to={"/finance/home"}>
+    <div className="h-20 w-full flex items-center justify-evenly gap-4 bg-[#EFEDF1]">
+      <Link to={"/finance/home"}>
         <NavItem
           isActive={pathname === "/finance/home"}
           label={"Home"}
@@ -17,12 +17,12 @@ export const NavigationBottom = () => {
             <Home
               size={24}
               color={pathname === "/finance/home" ? "#345ca8" : "#345ca850"}
-              className="bg-transparent"
+             
             />
           }
         />
       </Link>
-      <Link className="bg-transparent" to={"/finance/tuition"}>
+      <Link to={"/finance/tuition"}>
         <NavItem
           isActive={pathname === "/finance/tuition"}
           label={"Finanças"}
@@ -30,12 +30,12 @@ export const NavigationBottom = () => {
             <DollarSign
               size={24}
               color={pathname === "/finance/tuition" ? "#345ca8" : "#345ca850"}
-              className="bg-transparent"
+             
             />
           }
         />
       </Link>
-      <Link className="bg-transparent" to={"/finance/details"}>
+      <Link to={"/finance/details"}>
         <NavItem
           isActive={pathname === "/finance/details"}
           label={"Detalhes"}
@@ -43,17 +43,30 @@ export const NavigationBottom = () => {
             <BarChart2
               size={24}
               color={pathname === "/finance/details" ? "#345ca8" : "#345ca850"}
-              className="bg-transparent"
+             
             />
           }
         />
       </Link>
-      <Link className="bg-transparent" to={"/"} onClick={logout}>
+      {<Link to={"/finance/register"}>
+        <NavItem
+          isActive={pathname === "/finance/register"}
+          label={"Cadastro"}
+          icon={
+            <UserPlus
+              size={24}
+              color={pathname === "/finance/register" ? "#345ca8" : "#345ca850"}
+             
+            />
+          }
+        />
+      </Link>}
+      <Link to={"/"} onClick={logout}>
         <NavItem
           isActive={false}
           label="Sair"
           icon={
-            <LogOut size={24} color={"#345ca870"} className="bg-transparent" />
+            <LogOut size={24} color={"#345ca870"} />
           }
         />
       </Link>

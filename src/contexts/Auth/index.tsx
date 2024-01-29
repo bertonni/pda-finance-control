@@ -9,6 +9,7 @@ import { useMemo, useState, useEffect, createContext } from "react";
 import {
   AuthContextProviderProps,
   AuthContextType,
+  LoggedUser,
 } from "./types";
 import { auth, db, provider } from "../../utils/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -16,14 +17,27 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
-  const [loggedUser, setLoggedUser] = useState<User | null>(null);
+  const [loggedUser, setLoggedUser] = useState<LoggedUser | null>(null);
   const [error, setError] = useState<string>("");
   const [loadingInitial, setLoadingInitial] = useState<boolean>(true);
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user) {
-        setLoggedUser(user);
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          setLoggedUser(docSnap.data() as LoggedUser);
+        }
+        // const usr: LoggedUser = {
+        //   name: user.displayName,
+        //   email: user.email,
+        //   uid: user.uid,
+        //   photoURL: user.photoURL,
+        //   is
+        // }
+        // setLoggedUser(user);
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
       } else {
@@ -39,16 +53,18 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      console.log('user already exists');
+      setLoggedUser(docSnap.data() as LoggedUser)
       return;
     } else {
-      const newUser = {
+      const newUser: LoggedUser = {
         name: user.displayName,
         email: user.email,
         uid: user.uid,
+        isAdmin: false,
         photoURL: user.photoURL
       }
       await setDoc(doc(db, "users", user.uid), newUser);
+      setLoggedUser(newUser);
     }
   }
 
@@ -59,8 +75,7 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
 
         // The signed-in user info.
         const user = result.user;
-        insertUser(result.user);
-        setLoggedUser(user);
+        insertUser(user);
       })
       .catch((error) => {
         // Handle Errors here.

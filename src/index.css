@@ -11,7 +11,7 @@
 
   * {
     font-family: 'Roboto', system-ui, -apple-system, 'Open Sans', 'Helvetica Neue', sans-serif;
-    @apply bg-surface text-on-surface
+    @apply  text-on-surface
   }
 
   .display-large {

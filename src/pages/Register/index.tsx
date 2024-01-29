@@ -1,16 +1,13 @@
 import { Header } from "../../components/Header";
 
-function TuitionPage() {
-
+export const RegisterPage = () => {
   return (
     <div
       className="w-screen flex flex-col items-center
       justify-between pb-28 h-full"
     >
-      <Header title="Mensalidades" />
+      <Header title="Registro" />
 
     </div>
-  );
+  )
 }
-
-export default TuitionPage;

@@ -8,6 +8,8 @@ import HomePage from './pages/Home/index.tsx'
 import TuitionPage from './pages/Tuition/index.tsx'
 import DetailsPage from './pages/Details/index.tsx'
 import AuthContextProvider from './contexts/Auth/index.tsx'
+import { RegisterPage } from './pages/Register/index.tsx'
+import FinanceContextProvider from './contexts/Finance/index.tsx'
 
 const router = createBrowserRouter([
   {
@@ -31,6 +33,10 @@ const router = createBrowserRouter([
         element: <DetailsPage />
       },
       {
+        path: 'register',
+        element: <RegisterPage />
+      },
+      {
         path: 'other',
         element: <HomePage />
       },
@@ -41,7 +47,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <AuthContextProvider>
-      <RouterProvider router={router} />
+      <FinanceContextProvider>
+        <RouterProvider router={router} />
+      </FinanceContextProvider>
     </AuthContextProvider>
   </React.StrictMode>,
 )
