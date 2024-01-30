@@ -16,6 +16,13 @@ import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const localUser = localStorage.getItem("user");
+let localUserDefault = {} as LoggedUser;
+if (localUser) {
+  const user = JSON.parse(localUser) as LoggedUser;
+  localUserDefault = user;
+}
+
 const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const [loggedUser, setLoggedUser] = useState<LoggedUser | null>(null);
   const [error, setError] = useState<string>("");
@@ -24,11 +31,15 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       if (user) {
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          setLoggedUser(docSnap.data() as LoggedUser);
+        if (localUserDefault.uid) {
+          setLoggedUser(localUserDefault);
+        } else {
+          const docRef = doc(db, "users", user.uid);
+          const docSnap = await getDoc(docRef);
+  
+          if (docSnap.exists()) {
+            setLoggedUser(docSnap.data() as LoggedUser);
+          }
         }
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
@@ -38,7 +49,7 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
       }
       setLoadingInitial(false);
     });
-  }, [loggedUser]);
+  }, []);
 
   const insertUser = async (user: User) => {
     const docRef = doc(db, "users", user.uid);
@@ -46,6 +57,7 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
 
     if (docSnap.exists()) {
       setLoggedUser(docSnap.data() as LoggedUser)
+      localStorage.setItem("user", JSON.stringify(docSnap.data()));
       return;
     } else {
       const newUser: LoggedUser = {
@@ -56,20 +68,21 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         photoURL: user.photoURL
       }
       await setDoc(doc(db, "users", user.uid), newUser);
+      localStorage.setItem("user", JSON.stringify(newUser));
       const newFinance = {
         athlete: user.uid,
-        jan_2024: 'ok',
-        fev_2024: '-',
-        mar_2024: '-',
-        abr_2024: '-',
-        mai_2024: '-',
-        jun_2024: '-',
-        jul_2024: '-',
-        ago_2024: '-',
-        set_2024: '-',
-        out_2024: '-',
-        nov_2024: '-',
-        dez_2024: '-',
+        jan_2024: 'Pendente',
+        fev_2024: 'Pendente',
+        mar_2024: 'Pendente',
+        abr_2024: 'Pendente',
+        mai_2024: 'Pendente',
+        jun_2024: 'Pendente',
+        jul_2024: 'Pendente',
+        ago_2024: 'Pendente',
+        set_2024: 'Pendente',
+        out_2024: 'Pendente',
+        nov_2024: 'Pendente',
+        dez_2024: 'Pendente',
       }
       await addDoc(collection(db, "finances"), newFinance);
       setLoggedUser(newUser);
