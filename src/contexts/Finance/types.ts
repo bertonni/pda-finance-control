@@ -5,15 +5,19 @@ export interface FinanceContextProviderProps {
 }
 
 export interface Athlete {
+  id: string;
   name: string
-  surname: string
   club: string;
-  number: string;
+}
+
+export interface AthleteFormData {
+  name: string
+  club: string;
 }
 
 export type FinanceContextType = {
   athletes: Athlete[];
-  addAthlete: (athlete: Athlete) => void;
+  addAthlete: (athlete: AthleteFormData) => void;
   loadingInitial: boolean
   error: string
   setError: (value: string) => void

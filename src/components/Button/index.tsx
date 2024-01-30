@@ -26,7 +26,7 @@ export const Button = ({
     <button
       {...rest}
       className="h-10 flex items-center justify-center bg-primary text-white
-        rounded-full px-3 label-large hover:elevation-1"
+        rounded-full px-3 label-large hover:elevation-1 w-full"
     >
       {title}
     </button>

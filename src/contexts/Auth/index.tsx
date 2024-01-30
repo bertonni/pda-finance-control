@@ -12,7 +12,7 @@ import {
   LoggedUser,
 } from "./types";
 import { auth, db, provider } from "../../utils/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -30,14 +30,6 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         if (docSnap.exists()) {
           setLoggedUser(docSnap.data() as LoggedUser);
         }
-        // const usr: LoggedUser = {
-        //   name: user.displayName,
-        //   email: user.email,
-        //   uid: user.uid,
-        //   photoURL: user.photoURL,
-        //   is
-        // }
-        // setLoggedUser(user);
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
       } else {
@@ -64,6 +56,22 @@ const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         photoURL: user.photoURL
       }
       await setDoc(doc(db, "users", user.uid), newUser);
+      const newFinance = {
+        athlete: user.uid,
+        jan_2024: 'ok',
+        fev_2024: '-',
+        mar_2024: '-',
+        abr_2024: '-',
+        mai_2024: '-',
+        jun_2024: '-',
+        jul_2024: '-',
+        ago_2024: '-',
+        set_2024: '-',
+        out_2024: '-',
+        nov_2024: '-',
+        dez_2024: '-',
+      }
+      await addDoc(collection(db, "finances"), newFinance);
       setLoggedUser(newUser);
     }
   }
